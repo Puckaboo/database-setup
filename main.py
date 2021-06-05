@@ -18,7 +18,9 @@ server_credentials= {
     "port": "5432"
 }
 
-
+#####################################################################################
+# main program
+#####################################################################################
 try:
     # connect to the server
     connection = psycopg2.connect(**server_credentials)
