@@ -36,3 +36,11 @@ Choose postgresql as a datasource and fill in the following:
 * disable TLS/SSL (its just for testing stuff on your own machine now...)
 
 And finally save and test the connection to the database.
+
+Note that if you are running postgres as a container the ip of the host is the ip of the docker container.
+The default setting is to add containers to the "bridge" network.
+
+To retreive the ip of the container containers on the bridge network:
+```
+$ docker network inspect bridge
+```
