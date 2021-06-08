@@ -1,5 +1,4 @@
 # database-setup
-
 This code imports data from a .csv, stores it in a pandas dataframe to upload it to a sql database.
 It was created based on the following articles: 
 
@@ -7,6 +6,32 @@ https://www.dataquest.io/blog/loading-data-into-postgres/
 https://naysan.ca/2020/05/09/pandas-to-postgresql-using-psycopg2-bulk-insert-performance-benchmark/
 https://pynative.com/python-postgresql-tutorial/
 
+## TLDR
+Preparations:
+* prepare .csv file so it has one time column in a standard format (e.g. YYYY-MM-DD hh:mm:ss)
+* prepare a python virtual environment installing the requirements as listed in requirements.txt
+
+
+Follow these steps:
+* store the .csv file in the /data folder
+* adjust the input variables in the main.py script
+* run a postgres database in a docker container
+* run grafana in a docker container
+* run `python main.py`
+
+The script creates a new column called 'epoch', translating the text from the time column to
+an integer representing time in the unix epoch format.
+
+To visualize in grafana do:
+* connect the database
+* define the query using the query builder or directly 
+```
+SELECT
+  epoch AS "time",
+  "S7 Leg PSAft Data Data Yoke Load1"
+FROM challenger
+ORDER BY 1
+```
 
 
 ## postgres in a docker container
@@ -44,7 +69,7 @@ To retreive the ip of the container containers on the bridge network:
 ```
 $ docker network inspect bridge
 ```
-
+Adding a user 'grafanareader' and granting read privileges on the 'public' schema and a table (e.g. challenger):
 ```
  CREATE USER grafanareader WITH PASSWORD 'password';
  GRANT USAGE ON SCHEMA public TO grafanareader;
