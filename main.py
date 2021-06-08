@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 #####################################################################################
 # input
 #####################################################################################
-data_path = "./data/data_large.csv"
+data_path = "./data/data_small.csv"
 table_name = "challenger"
 dbname= "postgres"
 user= "postgres"
@@ -21,6 +21,8 @@ port= "5432"
 # main program
 #####################################################################################
 df= pd.read_csv(data_path)
+df.insert(0, "Time", pd.to_datetime(df["S7 Leg SBFore Data Data Leg Time"]))
+print("successfully added time column to database")
 
 postgres_url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 print("connecting to "+postgres_url)
