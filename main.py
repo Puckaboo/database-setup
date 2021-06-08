@@ -24,9 +24,8 @@ port= "5432"
 #####################################################################################
 df= pd.read_csv(data_path)
 
-df["epoch"] = pd.to_datetime(df[time_column],utc= True).values.astype(np.int64) // 10**6
+df.insert(0, "epoch", pd.to_datetime(df[time_column],utc= True).values.astype(np.int64) // 10**6)
 print("successfully added time column to database")
-
 df_copy = df.copy()
 
 postgres_url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"

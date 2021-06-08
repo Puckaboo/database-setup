@@ -44,3 +44,9 @@ To retreive the ip of the container containers on the bridge network:
 ```
 $ docker network inspect bridge
 ```
+
+```
+ CREATE USER grafanareader WITH PASSWORD 'password';
+ GRANT USAGE ON SCHEMA public TO grafanareader;
+ GRANT SELECT ON public.challenger TO grafanareader;
+```
