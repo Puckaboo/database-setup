@@ -25,8 +25,8 @@ Then go through the following steps to fill a postgresql database with python:
 * prepare .csv file so it has one time column in a standard format (e.g. YYYY-MM-DD hh:mm:ss)
 * store the .csv file in the /data folder
 * adjust the input variables in the main.py script
-* run a postgres database in a docker container
-* run grafana in a docker container
+* run a postgres database in a docker container (see section on postgres
+* run grafana in a docker container (see section on grafana)
 * run `python main.py`
 
 The script creates a new column called 'epoch', translating the text from the time column to
