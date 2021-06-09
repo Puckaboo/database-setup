@@ -8,11 +8,21 @@ https://pynative.com/python-postgresql-tutorial/
 
 ## TLDR
 Preparations:
+* prepare a python virtual environment installing the requirements as listed in requirements.txt using e.g. virtualenv
+
+To install the virtualenv package
+```
+$ pip install virtualenv
+```
+
+To setup a virtual environment, go to the project folder and open a terminal here. Do:
+```
+$ virtualenv database-env 
+$ source database-env/bin/activate
+```
+
+Then go through the following steps to fill a postgresql database with python:
 * prepare .csv file so it has one time column in a standard format (e.g. YYYY-MM-DD hh:mm:ss)
-* prepare a python virtual environment installing the requirements as listed in requirements.txt
-
-
-Follow these steps:
 * store the .csv file in the /data folder
 * adjust the input variables in the main.py script
 * run a postgres database in a docker container
@@ -22,8 +32,8 @@ Follow these steps:
 The script creates a new column called 'epoch', translating the text from the time column to
 an integer representing time in the unix epoch format.
 
-To visualize in grafana do:
-* connect the database
+To visualize in grafana:
+* connect the database going through the grafana steps
 * define the query using the query builder or directly 
 ```
 SELECT
@@ -32,7 +42,7 @@ SELECT
 FROM challenger
 ORDER BY 1
 ```
-
+See below for more information.
 
 ## postgres in a docker container
 To pull the latest postgres docker image and spin up a database server in a container run:
