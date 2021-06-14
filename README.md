@@ -5,6 +5,7 @@ It was created based on the following articles:
 https://www.dataquest.io/blog/loading-data-into-postgres/
 https://naysan.ca/2020/05/09/pandas-to-postgresql-using-psycopg2-bulk-insert-performance-benchmark/
 https://pynative.com/python-postgresql-tutorial/
+https://stackoverflow.com/questions/39494056/progress-bar-for-pandas-dataframe-to-sql
 
 ## TLDR
 Preparations:
