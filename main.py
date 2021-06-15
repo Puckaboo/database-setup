@@ -1,6 +1,9 @@
 #####################################################################################
 # imports
 #####################################################################################
+import os
+import glob
+import pathlib
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
@@ -10,7 +13,7 @@ from tqdm import tqdm
 #####################################################################################
 # input
 #####################################################################################
-data_path= "./data/data_small.csv"
+path= "/data-confidential/"
 time_column= "S7 Leg SBFore Data Data Leg Time"
 table_name = "challenger"
 dbname= "postgres"
@@ -38,20 +41,26 @@ def insert_with_progress(df):
 #####################################################################################
 # main program
 #####################################################################################
-df= pd.read_csv(data_path)
+cwd = os.getcwd()
+all_files = glob.glob(os.path.join(cwd+path, "*.csv"))
+df = pd.concat((pd.read_csv(f, sep= ";") for f in all_files), ignore_index=True)
 
 postgres_url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 print("connecting to "+postgres_url)
 
-df.insert(0, "epoch", pd.to_datetime(df[time_column],utc= True).values.astype(np.int64) // 10**6)
-print("successfully added time column to database")
-
-df_copy = df.copy()
+# The following error occurs when inserting a new column in the dataframe the python way
+# Perhaps a better approach is to load in the data first, and add the new columns later in postgres
+#
+#(psycopg2.errors.UndefinedColumn) column "Epoch" of relation "challenger" does not exist
+# df.insert(0, "Epoch", pd.to_datetime(df[time_column],utc= True).values.astype(np.int64) // 10**6)
+# df["Epoch"] = pd.to_datetime(df[time_column],utc= True).values.astype(np.int64) // 10**6
+# print(df.head())
+# print("successfully added time column to database")
 
 try:
     print("Uploading the data to postgres. This may take a while ...")
     engine = create_engine(postgres_url)
-    insert_with_progress(df_copy)
+    insert_with_progress(df)
 except ValueError as vx:
     print(vx)
 except Exception as ex:  
