@@ -15,10 +15,15 @@ To install the virtualenv package
 $ pip install virtualenv
 ```
 
-To setup a virtual environment, go to the project folder and open a terminal here. Do:
+To setup and start a virtual environment, go to the project folder and open a terminal here. Do:
 ```
 $ virtualenv database-env 
 $ source database-env/bin/activate
+```
+
+To install the requirements for running the code enter in the virtual environment:
+```
+$ pip install -r requirements.txt 
 ```
 
 Then go through the following steps to fill a postgresql database with python:
