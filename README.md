@@ -1,5 +1,5 @@
 # database-setup
-This code imports data from a .csv, stores it in a pandas dataframe to upload it to a sql database.
+This code imports data from .csv files, stores it in a pandas dataframe to upload it into a sql database.
 It was created based on the following articles: 
 
 https://www.dataquest.io/blog/loading-data-into-postgres/
@@ -22,27 +22,35 @@ $ source database-env/bin/activate
 ```
 
 Then go through the following steps to fill a postgresql database with python:
-* prepare .csv file so it has one time column in a standard format (e.g. YYYY-MM-DD hh:mm:ss)
 * store the .csv file in the /data folder
 * adjust the input variables in the main.py script
-* run a postgres database in a docker container (see section on postgres
+* run a postgres database in a docker container (see section on postgres)
 * run grafana in a docker container (see section on grafana)
 * run `python main.py`
 
-The script creates a new column called 'epoch', translating the text from the time column to
-an integer representing time in the unix epoch format.
+The script creates a table for each .csv file. Within each table an 'epoch' column is inserted, 
+translating the text from the time column to an integer representing time in the unix epoch format.
 
 To visualize in grafana:
 * connect the database going through the grafana steps
-* define the query using the query builder or directly 
+* define the query using the query builder 
+  * From: enter table name of choice e.g. "legSB_fore"
+  * Time: search for "epoch"
+  * Select: enter column name of choice e.g."S7 Leg SBFore Data Data Leg Load"
+  * Where: remove the standard filter $__timeFilter
+
+The sql query is as follows:
 ```
 SELECT
   epoch AS "time",
-  "S7 Leg PSAft Data Data Yoke Load1"
-FROM challenger
+  "[column name]"
+FROM [table name]
 ORDER BY 1
 ```
-See below for more information.
+
+Once set up correctly you can add more queries to different tables as shown in the example below:
+
+![Alt text](assets/grafana_example.png?raw=true "Grafana Example")
 
 ## postgres in a docker container
 To pull the latest postgres docker image and spin up a database server in a container run:
@@ -79,9 +87,15 @@ To retreive the ip of the container containers on the bridge network:
 ```
 $ docker network inspect bridge
 ```
-Adding a user 'grafanareader' and granting read privileges on the 'public' schema and a table (e.g. challenger):
+
+### user permissions
+The database user you specify when you add the data source should only be granted SELECT permissions on the specified database and tables you want to query. Now this is not the case, but it is ok for this use case.
+
+Adding a user 'grafanareader' and granting read privileges on the 'public' schema and a table:
 ```
  CREATE USER grafanareader WITH PASSWORD 'password';
  GRANT USAGE ON SCHEMA public TO grafanareader;
- GRANT SELECT ON public.challenger TO grafanareader;
+ GRANT SELECT ON public.[table name] TO grafanareader;
 ```
+
+Read more on setting permissions for a user here https://grafana.com/docs/grafana/latest/datasources/postgres/
