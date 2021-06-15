@@ -28,7 +28,7 @@ cwd = os.getcwd()
 all_files = glob.glob(os.path.join(cwd+path, "*.csv"))
 
 for f in all_files:
-    print(f"Adding the following file: {f}")
+    print(f"reading {f}")
     df= pd.read_csv(f, sep= separator)
     
     time_column = [s for s in df.columns if "Leg Time" in s][0]
@@ -39,10 +39,10 @@ for f in all_files:
     print("connecting to "+postgres_url)
 
     try:
-        print("Uploading the data to postgres. This may take a while ...")
-
         table_name = f.split("/")[-1][0:-14]
         engine = create_engine(postgres_url)
+
+        print(f"Uploading the data from {table_name} to postgres. This may take a while ...")
         df.to_sql(table_name, engine, if_exists='replace', index= False)
     except ValueError as vx:
         print(vx)
