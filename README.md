@@ -44,12 +44,21 @@ To visualize in grafana:
   * Select: enter column name of choice e.g."S7 Leg SBFore Data Data Leg Load"
   * Where: remove the standard filter $__timeFilter
 
-The sql query is as follows:
+The sql query for time series data is as follows:
 ```
 SELECT
   epoch AS "time",
   "[column name]"
 FROM [table name]
+ORDER BY 1
+```
+
+In case a column contains boolean values, which are filtered out by Grafana, you can convert the booleans to integers in the query as follows:
+```
+SELECT
+  epoch AS "time",
+  CAST("[column name]" as int)
+FROM "[table name]"
 ORDER BY 1
 ```
 
