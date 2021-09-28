@@ -12,7 +12,10 @@ import psycopg2
 #####################################################################################
 # input
 #####################################################################################
-path= "/data-confidential2"
+print('Type folder name:')
+path= '/'+input()
+print('Time column name:')
+time_column_name = input()
 separator= ";"
 dbname= "postgres"
 user= "postgres"
@@ -54,7 +57,7 @@ for f in all_files:
     print(f"reading {f}")
     df= pd.read_csv(f, sep= separator)
     
-    time_column = [s for s in df.columns if "Leg Time" in s][0]
+    time_column = [s for s in df.columns if time_column_name in s][0]
     df.insert(0, "epoch", pd.to_datetime(df[time_column],utc= True).values.astype(np.int64) // 10**6)
     print("successfully added time column to database")
 
